@@ -1,0 +1,62 @@
+---
+title: "ST_512-homework2"
+author: "Lindsay Dodson"
+format: html
+---
+
+## Problem 1
+
+|            |     |       |        |         |         |
+|------------|-----|-------|--------|---------|---------|
+| source     | df  | SS    | MS     | F-value | p-value |
+| dosage/trt | 2   | 450.7 | 225.35 | 7.031   | 0.95    |
+| error      | 9   | 288.2 | 32.02  |         |         |
+| total      | 11  | 738.9 | 257.4  |         |         |
+
+: Lindsay Dodson
+
+```{r}
+# f-value
+f1<- qf(1-.95, 2, 11)
+f1
+1-(pf(f1,2,9))
+```
+**a**
+
+Because F>f, we reject the null hypothesis, and have evidence to conclude that dosage level does affect bioactivity.
+
+**b**
+
+```{r}
+t_val1<-qt(.975,11)
+point_est1<- 36.75
+SE1<- 1.634
+
+point_est1 - t_val1*SE1
+point_est1 + t_val1*SE1
+```
+
+The 95% confidence interval is (33.153, 40.346). 
+
+**c**
+```{r}
+t_val2<-qt(.995, 11)
+point_est2<- 44.75-29.75
+SE2<- sqrt((32.02)*((1/4)+(1/4)))
+
+point_est2 - t_val2*SE2
+point_est2 + t_val2*SE2
+```
+
+The 99% confidence interval is (2.57, 27.42).
+
+**d**
+
+simultaneous CI ??
+
+**e**
+
+```{r}
+
+```
+
