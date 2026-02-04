@@ -21,9 +21,10 @@ f1<- qf(1-.95, 2, 11)
 f1
 1-(pf(f1,2,9))
 ```
+
 **a**
 
-Because F>f, we reject the null hypothesis, and have evidence to conclude that dosage level does affect bioactivity.
+Because F\>f, we reject the null hypothesis, and have evidence to conclude that dosage level does affect bioactivity.
 
 **b**
 
@@ -36,9 +37,10 @@ point_est1 - t_val1*SE1
 point_est1 + t_val1*SE1
 ```
 
-The 95% confidence interval is (33.153, 40.346). 
+The 95% confidence interval is (33.153, 40.346).
 
 **c**
+
 ```{r}
 t_val2<-qt(.995, 11)
 point_est2<- 44.75-29.75
@@ -51,10 +53,6 @@ point_est2 + t_val2*SE2
 The 99% confidence interval is (2.57, 27.42).
 
 **d**
-
-simultaneous CI ??
-
-**e**
 
 ```{r}
 #Standard Error 
@@ -70,14 +68,14 @@ tuk_1*SE3 #margin of error
 point_est2+(tuk_1*SE3) #Confidence interval
 point_est2-(tuk_1*SE3)
 
-#Bonferoni
+#Bonferroni
 bon_1<-qt(1-(0.05/6),9) #CV
 bon_1*SE3 #MoE
 
 point_est2+(bon_1*SE3) #CI
 point_est2-(bon_1*SE3)
 
-#Schaffe's
+#Scheffe's
 schaf_1<- sqrt((qf(1-0.05,2,9))*2) #CV
 schaf_1*SE3 #MoE
 
@@ -85,17 +83,18 @@ point_est2+(schaf_1*SE3) #CI
 point_est2-(schaf_1*SE3)
 
 ```
+
 Confidence Intervals
 
 Tukey: (-29.7,59.7)
 
-Bonferoni: (-31.96, 61.96)
+Bonferroni: (-31.96, 61.96)
 
-Schaffe's: (-31.71, 61.71)
+Scheffe's: (-31.71, 61.71)
 
 **e**
 
-Tukey's HSD = $Q*\sqrt{\frac{MSE}{n}}$ 
+Tukey's HSD = $Q*\sqrt{\frac{MSE}{n}}$
 
 HSD=5.26
 
@@ -104,7 +103,6 @@ HSD=5.26
 1 vs 2: $|29.75-36.75|=7 > 5.26$ different
 
 2 vs 3: $|36.75-44.75|=8 > 5.26$ different
-
 
 ## Problem 2
 
@@ -117,12 +115,127 @@ print(Portland_data)
 anova_model <- aov(strength ~ mix_tech, data = Portland_data)
 summary(anova_model)
 ```
+
 **a**
 
-Because the p-value=0.0005<<alpha=0.05, we reject the null hypothesis and have strong evidence to conclude that the mixing techniques affect the strength of the cement. 
+Because the p-value=0.0005\<\<alpha=0.05, we reject the null hypothesis and have strong evidence to conclude that the mixing techniques affect the strength of the cement.
 
 **b**
 
+```{r}
+mean_mix3<- 2933.75
+mix_CV<- qt(1-.05, 15) ##is alpha 0.05 or .95
+SE_mix<- sqrt(12825.7/16) # check SE
 
+mean_mix3 - (mix_CV*SE_mix)
+mean_mix3 + (mix_CV*SE_mix)
+```
 
+The confidence interval is (2884.12, 2983.38)
+
+**c**
+
+```{r}
+## techniques 1 & 3
+mean_mix1 <- 2971.00
+PE_13<- (mean_mix1-mean_mix3)
+
+PE_13 - (mix_CV*SE_mix)
+PE_13 + (mix_CV*SE_mix)
+
+## techniques 3 & 4
+mean_mix4 <- 2666.25
+PE_34<- (mean_mix3-mean_mix4)
+
+PE_34 - (mix_CV*SE_mix)
+PE_34 + (mix_CV*SE_mix)
+```
+
+The confidence interval for techniques 1 & 3 is (-12.39, 86.89).
+
+The confidence interval for techniques 3 & 4 is (217.87, 317.13).
+
+**d**
+
+```{r}
+#Tukey's
+tuk_portland<-(qtukey(1-0.05, 4, 12))/sqrt(2) #can we use the same SE ? sd is the same for all groups, so that would make SE 0 if not using MSE/n forumla
+tuk_portland*SE_mix
+PE_13-(tuk_portland*SE_mix)
+PE_13+(tuk_portland*SE_mix)
+
+#Bonferroni
+bon_portland<- qt((1-.0041667),12)
+bon_portland*SE_mix
+
+PE_13-(bon_portland*SE_mix)
+PE_13+(bon_portland*SE_mix)
+
+#Scheffe's
+sch_portland<- sqrt(3*qf(1-0.05,3,12))
+sch_portland*SE_mix
+
+PE_13-(sch_portland*SE_mix)
+PE_13+(sch_portland*SE_mix)
+```
+
+Tukey's CI: (-46.81, 121.31)
+
+Bonferroni CI: (-52.01, 126.51)
+
+Scheffe's CI: (-54.37, 128.87)
+
+**e**
+
+```{r}
+bon_portland*SE_mix
+```
+
+**f**
+
+```{r}
+tuk_portland*SE_mix
+```
+
+**g**
+
+```{r}
+sch_portland*SE_mix
+```
+
+## Problem 3
+
+Contrast 1:
+
+$L_1=(1)\mu_1+(-\frac{1}{3})\mu_2+(-\frac{1}{3})\mu_3+(-\frac{1}{3})\mu_4=0$
+
+$\hat{L}=\bar{y}_1\cdot-\frac{\bar{y}_2\cdot+\bar{y}_3\cdot+\bar{y}_4\cdot}{3}=1.867$
+
+$sd(\hat{L_2})=MSE*\sum\frac{c_i^2}{n_i} = 196.0*0.067=13.07$
+
+Contrast 2:
+
+$L_1=(1)\mu_2+(-\frac{1}{2})\mu_3+(-\frac{1}{2})\mu_4=0$
+
+$\hat{L}=\bar{y}_2\cdot-\frac{\bar{y}_3\cdot+\bar{y}_4\cdot}{2}=1.6$
+
+$sd(\hat{L_2})=MSE*\sum\frac{c_i^2}{n_i} = 196.0*0.075=14.7$
+
+Contrast 3:
+
+$L_1=(1)\mu_3+(-1)\mu_4=0$
+
+$\hat{L}=\bar{y}_3\cdot-\bar{y}_4\cdot=1.6$
+
+$sd(\hat{L_2})=MSE*\sum\frac{c_i^2}{n_i} = 196.0*0.1=19.6$
+
+## Problem 4
+```{r}
+radon_release<-c(80,83,83,85,75,75,79,79,74,73,76,77,67,72,74,74,62,62,67,69,60,61,64,66)
+diameter<-c(rep("0.37",4),rep("0.51",4),rep("0.71",4),rep("1.02",4),rep("1.40",4),rep("1.99",4))
+radon_data<-data.frame(radon_release,diameter)
+radon_data
+str(radon_data)
+
+```
 
